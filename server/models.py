@@ -63,3 +63,39 @@ class WorkoutExercise(db.Model):
 
     def __repr__(self):
         return f"<WorkoutExercise {self.id}>"
+    
+# --- Inside Exercise ---
+    @validates("name")
+    def validate_name(self, key, name):
+        if not name or not name.strip():
+            raise ValueError("Exercise name cannot be empty.")
+        return name.strip()
+
+    @validates("category")
+    def validate_category(self, key, category):
+        if category not in VALID_CATEGORIES:
+            raise ValueError(f"category must be one of {VALID_CATEGORIES}.")
+        return category
+    
+# --- Inside Workout, add to __table_args__ ---
+    __table_args__ = (
+        CheckConstraint("duration_minutes > 0", name="check_duration_positive"),
+    )
+
+    @validates("duration_minutes")
+    def validate_duration(self, key, duration_minutes):
+        if not isinstance(duration_minutes, int) or duration_minutes <= 0:
+            raise ValueError("duration_minutes must be a positive integer.")
+        return duration_minutes
+    
+# --- Inside WorkoutExercise ---
+    __table_args__ = (
+        CheckConstraint("reps IS NULL OR reps > 0", name="check_reps_positive"),
+        CheckConstraint("sets IS NULL OR sets > 0", name="check_sets_positive"),
+    )
+
+    @validates("reps", "sets", "duration_seconds")
+    def validate_positive_numbers(self, key, value):
+        if value is not None and value <= 0:
+            raise ValueError(f"{key} must be a positive number.")
+        return value
