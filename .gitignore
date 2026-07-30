@@ -1,11 +1,38 @@
+# Byte-compiled / cache
 __pycache__/
 *.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
 .venv/
 venv/
+env/
+
+# Pipenv
 Pipfile.lock
+
+# Database
 *.db
 *.sqlite3
+
+# Instance / migrations config that can differ per machine
 instance/
+
+# Editors
 .vscode/
+.idea/
+*.swp
+
+# OS files
 .DS_Store
-.envmigrations/
+
+# Env vars
+.env
+
+# pyenv local version pin (machine-specific, don't force on collaborators)
+.python-version
